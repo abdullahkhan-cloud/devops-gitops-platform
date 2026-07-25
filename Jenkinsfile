@@ -1,66 +1,94 @@
-stages {
+pipeline {
+    agent any
 
-    stage('Checkout Source') {
-        steps {
-            checkout scm
-        }
+    tools {
+        jdk 'JDK21'
+        maven 'Maven'
     }
 
-    stage('Verify Build Environment') {
-        steps {
-            sh 'java -version'
-            sh 'mvn -version'
-            sh 'node -v'
-            sh 'npm -v'
-            sh 'docker --version'
-        }
+    options {
+        timestamps()
+        timeout(time: 30, unit: 'MINUTES')
     }
 
-    stage('Verify Workspace') {
-        steps {
-            sh 'pwd'
-            sh 'ls -la'
-        }
-    }
+    stages {
 
-    stage('Build Backend') {
-        steps {
-            dir('backend') {
-                sh 'mvn clean package -DskipTests'
+        stage('Checkout Source') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Verify Build Environment') {
+            steps {
+                sh 'java -version'
+                sh 'mvn -version'
+                sh 'node -v'
+                sh 'npm -v'
+                sh 'docker --version'
+            }
+        }
+
+        stage('Verify Workspace') {
+            steps {
+                sh 'pwd'
+                sh 'ls -la'
+            }
+        }
+
+        stage('Build Backend') {
+            steps {
+                dir('backend') {
+                    sh 'mvn clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                dir('frontend') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Build Backend Docker Image') {
+            steps {
+                dir('backend') {
+                    sh '''
+                        docker build \
+                        -t abdullahkhancloud/devops-gitops-backend:v1 \
+                        .
+                    '''
+                }
+            }
+        }
+
+        stage('Build Frontend Docker Image') {
+            steps {
+                dir('frontend') {
+                    sh '''
+                        docker build \
+                        -t abdullahkhancloud/devops-gitops-frontend:v1 \
+                        .
+                    '''
+                }
             }
         }
     }
 
-    stage('Build Frontend') {
-        steps {
-            dir('frontend') {
-                sh 'npm install'
-                sh 'npm run build'
-            }
+    post {
+        success {
+            echo 'CI pipeline completed successfully.'
         }
-    }
 
-    stage('Build Backend Docker Image') {
-        steps {
-            dir('backend') {
-                sh '''
-                    docker build \
-                    -t abdullahkhancloud/devops-gitops-backend:v1 \
-                    .
-                '''
-            }
+        failure {
+            echo 'CI pipeline failed.'
         }
-    }
 
-    stage('Build Frontend Docker Image') {
-        steps {
-            dir('frontend') {
-                sh '''
-                    docker build \
-                    -t abdullahkhancloud/devops-gitops-frontend:v1 \
-                    .
-                '''
-            }
+        always {
+            cleanWs()
         }
     }
 }
