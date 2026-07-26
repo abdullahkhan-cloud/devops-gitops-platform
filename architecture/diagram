@@ -1,0 +1,34 @@
+                    Developer
+                        │
+                        ▼
+                GitHub Repository
+                        │
+                  (Git Push)
+                        │
+                        ▼
+                  Jenkins Pipeline
+         ┌──────────────┴──────────────┐
+         ▼                             ▼
+ Build Spring Boot              Build React
+         │                             │
+         └──────────────┬──────────────┘
+                        ▼
+                  Docker Images
+                        │
+                        ▼
+                    Docker Hub
+                        │
+                        ▼
+                AWS EC2 Instance
+                        │
+                        ▼
+                Kubernetes (K3s)
+             ┌──────────┴──────────┐
+             ▼                     ▼
+      Backend Deployment    Frontend Deployment
+             │                     │
+             ▼                     ▼
+      Backend Service      Frontend Service
+             └──────────┬──────────┘
+                        ▼
+                     Browser

@@ -1,115 +1,267 @@
-# 🚀 Production Grade GitOps CI/CD Platform
+# 🚀 Production-Ready CI/CD Pipeline with Kubernetes
 
-A production-style DevOps project demonstrating an end-to-end CI/CD and GitOps workflow using AWS, Terraform, Jenkins, Docker, Kubernetes, Helm, ArgoCD, Prometheus, and Grafana.
+A production-style DevOps project that automates the build, containerization, and deployment of a full-stack application using Jenkins, Docker, Terraform, AWS, and Kubernetes.
 
----
-
-## 📌 Project Goal
-
-Build an automated CI/CD pipeline that:
-
-- Builds a Spring Boot backend
-- Builds a React frontend
-- Creates Docker images
-- Pushes images to Docker Hub
-- Deploys applications to Kubernetes using ArgoCD
-- Monitors applications using Prometheus and Grafana
+The project demonstrates how modern DevOps practices can be used to provision cloud infrastructure, build applications automatically, publish Docker images, and deploy workloads to a Kubernetes cluster.
 
 ---
 
-## 🏗️ Technology Stack
+# 📌 Project Overview
+
+This project implements a complete CI/CD workflow for a Spring Boot backend and a React frontend.
+
+The infrastructure is provisioned using Terraform on AWS. Jenkins automates the build process, Docker packages the applications into containers, Docker Hub stores the images, and Kubernetes (K3s) manages the deployment.
+
+---
+
+# ✨ Features
+
+- Infrastructure as Code using Terraform
+- AWS EC2 deployment
+- Jenkins CI Pipeline
+- Dockerized Spring Boot Backend
+- Dockerized React Frontend
+- Docker Hub Integration
+- Kubernetes Deployment
+- Kubernetes Services
+- Internal Pod-to-Pod Communication
+- NodePort Service Exposure
+- Production-style Repository Structure
+
+---
+
+# 🏗️ Architecture
+
+```
+                Developer
+                     │
+                     ▼
+              GitHub Repository
+                     │
+                     ▼
+                Jenkins Pipeline
+                     │
+      ┌──────────────┴──────────────┐
+      ▼                             ▼
+Build Backend                 Build Frontend
+      │                             │
+      └──────────────┬──────────────┘
+                     ▼
+               Docker Images
+                     │
+                     ▼
+                Docker Hub
+                     │
+                     ▼
+              Kubernetes (K3s)
+         ┌────────────┴────────────┐
+         ▼                         ▼
+   Backend Deployment      Frontend Deployment
+         │                         │
+         └────────────┬────────────┘
+                      ▼
+                 Kubernetes Services
+                      │
+                      ▼
+                  End Users
+```
+
+---
+
+# 🛠️ Technology Stack
 
 | Category | Technology |
 |----------|------------|
-| Cloud | AWS |
+| Cloud | AWS EC2 |
 | Infrastructure | Terraform |
-| Version Control | Git & GitHub |
 | CI | Jenkins |
+| Version Control | Git & GitHub |
 | Containerization | Docker |
-| Image Registry | Docker Hub |
-| Orchestration | Kubernetes |
-| Package Manager | Helm |
-| GitOps | ArgoCD |
-| Monitoring | Prometheus |
-| Dashboard | Grafana |
+| Registry | Docker Hub |
+| Orchestration | Kubernetes (K3s) |
 | Backend | Spring Boot |
-| Frontend | React (Vite) |
+| Frontend | React + Vite |
+| OS | Ubuntu Linux |
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
 ```text
-devops-gitops-platform/
-
+devops-gitops-platform
+│
 ├── backend/
+│   ├── Dockerfile
+│   ├── pom.xml
+│   └── src/
+│
 ├── frontend/
+│   ├── Dockerfile
+│   ├── package.json
+│   └── src/
+│
 ├── terraform/
-├── helm/
+│   ├── provider.tf
+│   ├── vpc.tf
+│   ├── subnet.tf
+│   ├── security-group.tf
+│   ├── ec2.tf
+│   ├── variables.tf
+│   └── outputs.tf
+│
 ├── k8s/
-├── monitoring/
-├── jenkins/
-├── scripts/
-├── docs/
+│   ├── namespace.yaml
+│   ├── backend-deployment.yaml
+│   ├── backend-service.yaml
+│   ├── frontend-deployment.yaml
+│   └── frontend-service.yaml
+│
 ├── diagrams/
+├── docs/
+├── scripts/
+├── Jenkinsfile
 ├── docker-compose.yml
 └── README.md
 ```
 
 ---
 
-## ✅ Completed Phases
+# ⚙️ Infrastructure Provisioning
 
-- [x] Git Repository
-- [x] GitHub Repository
-- [x] Spring Boot Backend
-- [x] React Frontend
-- [x] Docker Images
-- [x] Docker Compose
-- [x] Docker Hub Integration
+Terraform provisions:
+
+- VPC
+- Public Subnet
+- Internet Gateway
+- Route Table
+- Security Group
+- EC2 Instance
 
 ---
 
-## 🚧 Upcoming Phases
+# 🐳 Docker
 
-- Terraform Infrastructure
-- AWS EC2
-- Jenkins CI
+The project contains two Dockerized applications.
+
+### Backend
+
+- Spring Boot
+- Java 17
+- Maven
+
+### Frontend
+
+- React
+- Vite
+- Nginx
+
+Docker images are automatically pushed to Docker Hub.
+
+---
+
+# 🔄 Jenkins CI Pipeline
+
+Pipeline stages:
+
+1. Clone Repository
+2. Build Backend
+3. Build Frontend
+4. Build Docker Images
+5. Push Images to Docker Hub
+
+---
+
+# ☸️ Kubernetes Deployment
+
+The application is deployed using Kubernetes manifests.
+
+Resources include:
+
+- Namespace
+- Backend Deployment
+- Backend Service
+- Frontend Deployment
+- Frontend Service
+
+---
+
+# ✅ Deployment Verification
+
+Verified successfully:
+
+- Kubernetes Node Ready
+- Backend Pod Running
+- Frontend Pod Running
+- Kubernetes Services Created
+- Pod-to-Pod Communication
+- Frontend Accessible
+- Backend API Accessible
+
+Backend endpoint:
+
+```
+GET /api/hello
+```
+
+Example response:
+
+```json
+{
+  "message": "Hello from Spring Boot!"
+}
+```
+
+---
+
+# 📷 Project Screenshots
+
+Add screenshots here.
+
+- Jenkins Dashboard
+- Successful Pipeline
+- Docker Hub Repository
+- Terraform Apply
+- Kubernetes Pods
+- Kubernetes Services
+- Application UI
+
+---
+
+# 🚧 Challenges Faced
+
+During development the following issues were encountered and resolved:
+
+- AWS authentication issues
+- Terraform configuration validation
+- Docker image build failures
+- Kubernetes DiskPressure
+- Kubernetes Pod Scheduling
+- Kubernetes Service Networking
+- Backend API verification
+
+---
+
+# 📚 Skills Demonstrated
+
+- Git
+- GitHub
+- Linux
+- AWS
+- Terraform
+- Docker
+- Docker Compose
+- Docker Hub
+- Jenkins
+- CI/CD
 - Kubernetes
-- Helm
-- ArgoCD
-- Prometheus
-- Grafana
+- Kubernetes Networking
+- Spring Boot
+- React
+- Infrastructure as Code
 
 ---
+# 👨‍💻 Author
 
-## 📖 Learning Objectives
+Abdullah Khan
 
-- Infrastructure as Code
-- Continuous Integration
-- Continuous Deployment
-- GitOps
-- Kubernetes Administration
-- Cloud Infrastructure
-- Monitoring & Observability
-
-
-## Phase 6: Kubernetes Cluster Setup (Completed)
-
-### Kubernetes Distribution
-- k3s v1.36.2+k3s1
-
-### Environment
-- AWS EC2 (Ubuntu)
-- Docker installed
-- Single-node Kubernetes cluster
-
-### Cluster Verification
-
-```bash
-kubectl get nodes
-
-Output:
-
-NAME           STATUS   ROLES           AGE   VERSION
-ip-10-0-1-25   Ready    control-plane   v1.36.2+k3s1
+GitHub: https://github.com/abdullahkhan-cloud
