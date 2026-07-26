@@ -92,3 +92,24 @@ devops-gitops-platform/
 - Kubernetes Administration
 - Cloud Infrastructure
 - Monitoring & Observability
+
+
+## Phase 6: Kubernetes Cluster Setup (Completed)
+
+### Kubernetes Distribution
+- k3s v1.36.2+k3s1
+
+### Environment
+- AWS EC2 (Ubuntu)
+- Docker installed
+- Single-node Kubernetes cluster
+
+### Cluster Verification
+
+```bash
+kubectl get nodes
+
+Output:
+
+NAME           STATUS   ROLES           AGE   VERSION
+ip-10-0-1-25   Ready    control-plane   v1.36.2+k3s1
