@@ -6,6 +6,11 @@ pipeline {
         maven 'Maven'
     }
 
+    environment {
+        BACKEND_IMAGE = 'abdullahkhancloud/devops-gitops-backend:v1'
+        FRONTEND_IMAGE = 'abdullahkhancloud/devops-gitops-frontend:v1'
+    }
+
     options {
         timestamps()
         timeout(time: 30, unit: 'MINUTES')
@@ -56,11 +61,7 @@ pipeline {
         stage('Build Backend Docker Image') {
             steps {
                 dir('backend') {
-                    sh '''
-                        docker build \
-                        -t abdullahkhancloud/devops-gitops-backend:v1 \
-                        .
-                    '''
+                    sh "docker build -t ${BACKEND_IMAGE} ."
                 }
             }
         }
@@ -68,19 +69,38 @@ pipeline {
         stage('Build Frontend Docker Image') {
             steps {
                 dir('frontend') {
+                    sh "docker build -t ${FRONTEND_IMAGE} ."
+                }
+            }
+        }
+
+        stage('Docker Hub Login') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
                     sh '''
-                        docker build \
-                        -t abdullahkhancloud/devops-gitops-frontend:v1 \
-                        .
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                     '''
                 }
             }
         }
+
+        stage('Push Docker Images') {
+            steps {
+                sh "docker push ${BACKEND_IMAGE}"
+                sh "docker push ${FRONTEND_IMAGE}"
+            }
+        }
+
     }
 
     post {
         success {
             echo 'CI pipeline completed successfully.'
+            sh 'docker logout'
         }
 
         failure {
